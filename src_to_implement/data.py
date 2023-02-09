@@ -11,7 +11,7 @@ train_std = [0.16043035, 0.16043035, 0.16043035]
 
 
 class ChallengeDataset(Dataset):
-    def __init__(self, data, mode, transform):
+    def __init__(self, data, mode, transform=None):
         self.data = data
         self.mode = mode
         self._transform = transform    
@@ -23,7 +23,7 @@ class ChallengeDataset(Dataset):
         if torch.is_tensor(index):
             index = index.tolist()
 
-        image_path = str(Path("ex_4/src_to_implement/", self.data.iloc[index, 0]))
+        image_path = str(Path("./", self.data.iloc[index, 0]))
         image_label = torch.as_tensor(
             [self.data.iloc[index, 1], self.data.iloc[index, 2]]
         )
