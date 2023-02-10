@@ -61,7 +61,7 @@ trainer = Trainer(
 )
 
 # go, go, go... call fit on trainer
-res = trainer.fit(epochs=100)
+res = trainer.fit(epochs=200)
 
 # plot the results
 plt.plot(np.arange(len(res[0])), res[0], label="train loss")

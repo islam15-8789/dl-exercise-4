@@ -168,12 +168,12 @@ class Trainer:
                 end="\n",
             )
             # use the save_checkpoint function to save the model (can be restricted to epochs with improvement)
-            if self.f1_score >=60 and self.f1_score > self.prev_f1_score:
+            if self.f1_score >=0.60:
                 self.save_checkpoint(epoch_counter)
             # check whether early stopping should be performed using the early stopping criterion and stop if so
             if (
                 epoch_counter >= self._early_stopping_patience
-                and validation_losses[-1] - validation_loss == 0
+                and validation_losses[-2] - validation_losses[-1] == 0
             ):
                 break
             # return the losses for both training and validation
