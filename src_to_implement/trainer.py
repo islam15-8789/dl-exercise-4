@@ -23,7 +23,8 @@ class Trainer:
         self._train_dl = train_dl
         self._val_test_dl = val_test_dl
         self._cuda = cuda
-
+        self.prev_f1_score = 0
+        self.f1_score = 0
         self._early_stopping_patience = early_stopping_patience
 
         if cuda:
@@ -33,7 +34,7 @@ class Trainer:
     def save_checkpoint(self, epoch):
         t.save(
             {"state_dict": self._model.state_dict()},
-            "ex_4/checkpoints/checkpoint_{:03d}.ckp".format(epoch),
+            "checkpoints/checkpoint_{:03d}.ckp".format(epoch),
         )
 
     def restore_checkpoint(self, epoch_n):
@@ -127,9 +128,11 @@ class Trainer:
                 y_true.extend(y)
                 losses.append(loss)
                 # You might want to calculate these metrics in designated functions
+                self.prev_f1_score = self.f1_score
+                self.f1_score = f1_score(y_true=y_true, y_pred=y_predicted, average="macro")
             print(
                 "F1 Score: ",
-                f1_score(y_true=y_true, y_pred=y_predicted, average="macro"),
+                self.f1_score,
                 end=" ==> ",
             )
             # print("Confusion matrix: ", multilabel_confusion_matrix(y_true=y_true, y_pred=y_predicted))
@@ -165,7 +168,8 @@ class Trainer:
                 end="\n",
             )
             # use the save_checkpoint function to save the model (can be restricted to epochs with improvement)
-            # self.save_checkpoint(epoch_counter)
+            if self.f1_score >=60 and self.f1_score > self.prev_f1_score:
+                self.save_checkpoint(epoch_counter)
             # check whether early stopping should be performed using the early stopping criterion and stop if so
             if (
                 epoch_counter >= self._early_stopping_patience

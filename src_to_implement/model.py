@@ -157,7 +157,7 @@ class ResNet(torch.nn.Module):
         x = self.res_4_conv_2d_2(x)
         x = self.res_4_batch_norm_2(x) + res
         x = self.res_4_relu_2(x)
-        x = torch.mean(x.view(x.size(0), x.size(0), -1), dim=2)
+        x = torch.mean(x.view(x.size(0), x.size(1), -1), dim=2)
         x =  self.flatten(x)
         x =  self.fully_connected(x)
         x =  self.sigmoid(x)
