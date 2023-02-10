@@ -12,6 +12,7 @@ train_std = [0.16043035, 0.16043035, 0.16043035]
 
 class ChallengeDataset(Dataset):
     def __init__(self, data, mode, transform=None):
+        super().__init__()
         self.data = data
         self.mode = mode
         self._transform = transform    
